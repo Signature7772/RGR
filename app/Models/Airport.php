@@ -17,4 +17,6 @@ class Airport extends Model
     {
         return $this->belongsTo(City::class); // Один аеропорт належить одному місту
     }
+
+
 }

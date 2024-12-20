@@ -12,12 +12,10 @@ return new class extends Migration {
             $table->unsignedBigInteger('from_airport_id');
             $table->unsignedBigInteger('to_airport_id');
             $table->string('flight_number', 10)->unique();
-            $table->timestamp('departure_time');
-            $table->timestamp('arrival_time');
+            $table->dateTime('departure_time');
+            $table->dateTime('arrival_time');
             $table->timestamps();
 
-            $table->foreign('from_airport_id')->references('id')->on('airports')->onDelete('cascade');
-            $table->foreign('to_airport_id')->references('id')->on('airports')->onDelete('cascade');
         });
     }
 

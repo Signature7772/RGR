@@ -11,15 +11,3 @@ Route::get('/', [MathController::class, 'index']);
 
 // Обробка обчислення виразу
 Route::post('/calculate', [MathController::class, 'calculate'])->name('calculate');
-
-Route::get('/cities', function () {
-    return City::all();
-});
-
-Route::get('/airports', function () {
-    return Airport::all();
-});
-
-Route::get('/flights', function () {
-    return Flight::all();
-});

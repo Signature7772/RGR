@@ -9,7 +9,6 @@ class Flight extends Model
 {
     use HasFactory;
 
-    // Заповнювані поля для рейсу
     protected $fillable = ['from_airport_id', 'to_airport_id', 'flight_number', 'departure_time', 'arrival_time'];
 
     public function fromAirport()
@@ -20,5 +19,16 @@ class Flight extends Model
     public function toAirport()
     {
         return $this->belongsTo(Airport::class, 'to_airport_id');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'from_airport_id' => 'int',
+            'to_airport_id' => 'int',
+            'flight_number' => 'string',
+            'departure_time' => 'datetime',
+            'arrival_time' => 'datetime',
+        ];
     }
 }
