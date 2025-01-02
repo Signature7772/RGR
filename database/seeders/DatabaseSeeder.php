@@ -24,5 +24,19 @@ class DatabaseSeeder extends Seeder
             'email' => 'max@makrov.com',
             'password' => Hash::make('root'),
         ]);
+
+        User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'admin@makrov.com',
+            'role' => 'admin',
+            'password' => Hash::make('root'),
+        ]);
+
+        User::factory()->create([
+            'name' => 'User',
+            'email' => 'user@makrov.com',
+            'role' => 'user',
+            'password' => Hash::make('root'),
+        ]);
     }
 }

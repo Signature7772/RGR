@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -46,5 +47,18 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function canAccess(string $accessRole): bool
+    {
+
+        $role = $this->role;
+        $roles = config('roles.roles');
+        $userAccessLevel = $roles[$role];
+        $accessLevel = $roles[$accessRole];
+        if ($userAccessLevel <= $accessLevel) {
+            return true;
+        }
+        return false;
     }
 }

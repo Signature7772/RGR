@@ -11,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class FlightResource extends Resource
@@ -59,11 +60,7 @@ class FlightResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteAction::make(),
             ]);
     }
 
@@ -72,6 +69,22 @@ class FlightResource extends Resource
         return [
             //
         ];
+    }
+    public static function canCreate(): bool
+    {
+        return auth()->user()->canAccess('admin');
+    }
+    public static function canEdit(Model $record): bool
+    {
+        return auth()->user()->canAccess('admin');
+    }
+    public static function canDelete(Model $record): bool
+    {
+        return auth()->user()->canAccess('root');
+    }
+    public static function canView(Model $record): bool
+    {
+        return auth()->user()->canAccess('user');
     }
 
     public static function getPages(): array

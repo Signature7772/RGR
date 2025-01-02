@@ -2,11 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ApiTokenResource\Pages;
-use App\Models\ApiToken;
-use Filament\Forms\Components\Checkbox;
+use App\Filament\Resources\UserResource\Pages;
+use App\Models\User;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,28 +14,38 @@ use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class ApiTokenResource extends Resource
+class UserResource extends Resource
 {
-    protected static ?string $model = ApiToken::class;
+    protected static ?string $model = User::class;
 
-    protected static ?string $slug = 'api-tokens';
+    protected static ?string $slug = 'users';
 
-    protected static ?string $navigationIcon = 'heroicon-o-key';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('name')->nullable(),
+                TextInput::make('name')
+                    ->required(),
+
+                TextInput::make('email')
+                    ->required(),
 
 
-                DatePicker::make('expires_at')
-                    ->label('Expires Date')->nullable(),
+                TextInput::make('password')
+                    ->required(),
 
-                Checkbox::make('revoked')->default(false),
+                Select::make('role')
+                    ->options([
+                        'user' => 'User',
+                        'admin' => 'Admin',
+                        'root' => 'Root',
+                    ])->required()
             ]);
     }
 
@@ -47,17 +57,18 @@ class ApiTokenResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('expires_at')
-                    ->label('Expires Date')
-                    ->date(),
+                TextColumn::make('email')
+                    ->searchable()
+                    ->sortable(),
 
-                TextColumn::make('revoked'),
+
+
+                TextColumn::make('role'),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                EditAction::make(),
                 DeleteAction::make(),
             ]);
     }
@@ -65,20 +76,14 @@ class ApiTokenResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListApiTokens::route('/'),
-            'create' => Pages\CreateApiToken::route('/create'),
-            'edit' => Pages\EditApiToken::route('/{record}/edit'),
+            'index' => Pages\ListUsers::route('/'),
+            'create' => Pages\CreateUser::route('/create'),
         ];
     }
 
-    public static function getGloballySearchableAttributes(): array
-    {
-        return ['name'];
-    }
 
     public static function canAccess(): bool
     {
         return auth()->user()->canAccess('root');
     }
-
 }
